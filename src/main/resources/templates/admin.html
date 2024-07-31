@@ -1,0 +1,323 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Admin panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<nav class="navbar bg-dark border-bottom border-bottom-dark">
+    <div class="container-fluid">
+        <div class="text-start navbar-brand text-white">
+            <span id="user-username" class="fw-bold"></span>
+            <span>with roles:</span>
+            <span id="user-roles"></span>
+        </div>
+        <a class="text-end text-white-50" href="/logout">Logout</a>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin/">
+                            Admin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/">
+                            User
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <main role="main" class="col-sm-10 ml-sm-10 bg-light col-sm-10">
+            <h1 class="pt-3 pb-2">Admin panel</h1>
+            <div>
+                <nav class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#user-list" role="tab"
+                       aria-controls="nav-home" aria-selected="true">User list</a>
+                    <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#new-user" role="tab"
+                       aria-controls="nav-profile" aria-selected="false">New user</a>
+                </nav>
+            </div>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="user-list" role="tabpanel"
+                     aria-labelledby="nav-home-tab">
+                    <div class="card border text">
+                        <div class="card-header text">
+                            <h4>All users</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Age</th>
+                                    <th>Role</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                                </thead>
+                                <tbody id="user-table-body">
+                                <!-- Users will be populated here by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="new-user" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <div class="card border text">
+                        <div class="card-header border">
+                            <h4>Add new user</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="container-fluid">
+                                <form id="addUserForm">
+                                    <div class="row pt-3">
+                                        <div class="w-50 mx-auto text-center">
+                                            <label for="usernameSave" class="form-label fw-bold">Username</label>
+                                            <div class="col-sm-auto">
+                                                <input id="usernameSave" type="text"
+                                                       class="form-control form-control-sm" name="username" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row pt-3">
+                                        <div class="w-50 mx-auto text-center">
+                                            <label for="passwordSave" class="form-label fw-bold">Password</label>
+                                            <div class="col-sm-auto">
+                                                <input id="passwordSave" type="text" class="form-control"
+                                                       name="password" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row pt-3">
+                                        <div class="w-50 mx-auto text-center">
+                                            <label for="firstNameSave" class="form-label fw-bold">First Name</label>
+                                            <div class="col-sm-auto">
+                                                <input id="firstNameSave" type="text" class="form-control"
+                                                       name="firstName" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row pt-3">
+                                        <div class="w-50 mx-auto text-center">
+                                            <label for="lastNameSave" class="form-label fw-bold">Last Name</label>
+                                            <div class="col-sm-auto">
+                                                <input id="lastNameSave" type="text" class="form-control"
+                                                       name="lastName" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row pt-3">
+                                        <div class="w-50 mx-auto text-center">
+                                            <label for="ageSave" class="form-label fw-bold">Age</label>
+                                            <div class="col-sm-auto">
+                                                <input id="ageSave" type="text" class="form-control" name="age"
+                                                       required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row pt-3">
+                                        <div class="w-50 mx-auto text-center">
+                                            <label for="rolesChoose" class="form-label fw-bold">Roles:</label>
+                                            <div class="col-sm-auto">
+                                                <select id="rolesChoose" name="roleIds" multiple class="form-select">
+                                                    <!-- Roles will be populated here by JavaScript -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row pt-3">
+                                        <div class="w-50 mx-auto text-center">
+                                            <button type="submit" class="btn btn-success btn-lg">Add new user</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Модальные окна будут добавлены динамически через JavaScript -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const apiUrl = '/api/admin';
+
+        // Function to fetch all users
+        async function fetchUsers() {
+            const response = await fetch(`${apiUrl}/users`);
+            const users = await response.json();
+            return users;
+        }
+
+        // Function to fetch all roles
+        async function fetchRoles() {
+            const response = await fetch(`${apiUrl}/roles`);
+            const roles = await response.json();
+            return roles;
+        }
+
+        // Function to populate user table
+        async function populateUserTable() {
+            const users = await fetchUsers();
+            const roles = await fetchRoles();
+            const userTableBody = document.getElementById('user-table-body');
+
+            userTableBody.innerHTML = ''; // Clear existing rows
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.username}</td>
+                <td>${user.firstName}</td>
+                <td>${user.lastName}</td>
+                <td>${user.age}</td>
+                <td>${user.roles.map(role => role.name).join(', ')}</td>
+                <td><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#editUserModal-${user.id}">Edit</button></td>
+                <td><button type="button" class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button></td>
+            `;
+                userTableBody.appendChild(row);
+
+                // Create edit modal for each user
+                const editModal = document.createElement('div');
+                editModal.classList.add('modal', 'fade');
+                editModal.id = `editUserModal-${user.id}`;
+                editModal.tabIndex = -1;
+                editModal.setAttribute('aria-labelledby', 'editUserModalLabel');
+                editModal.setAttribute('aria-hidden', 'true');
+                editModal.innerHTML = `
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editUserModalLabel">Edit user</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editUserForm-${user.id}">
+                                <div class="mb-3">
+                                    <label for="usernameEdit-${user.id}" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="usernameEdit-${user.id}" name="username" value="${user.username}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="firstNameEdit-${user.id}" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstNameEdit-${user.id}" name="firstName" value="${user.firstName}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lastNameEdit-${user.id}" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastNameEdit-${user.id}" name="lastName" value="${user.lastName}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ageEdit-${user.id}" class="form-label">Age</label>
+                                    <input type="text" class="form-control" id="ageEdit-${user.id}" name="age" value="${user.age}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="rolesEdit-${user.id}" class="form-label">Roles</label>
+                                    <select multiple class="form-select" id="rolesEdit-${user.id}" name="roleIds">
+                                        ${roles.map(role => `
+                                            <option value="${role.id}" ${user.roles.some(userRole => userRole.id === role.id) ? 'selected' : ''}>${role.name}</option>
+                                        `).join('')}
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+                document.body.appendChild(editModal);
+
+                // Add event listener for form submission
+                document.getElementById(`editUserForm-${user.id}`).addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+                    const data = Object.fromEntries(formData.entries());
+                    data.roleIds = formData.getAll('roleIds').map(Number);
+                    updateUser(user.id, data);
+                });
+            });
+        }
+
+        // Function to add new user
+        document.getElementById('addUserForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            data.roleIds = formData.getAll('roleIds').map(Number);
+
+            const response = await fetch(`${apiUrl}/users`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                await populateUserTable();
+                this.reset();
+            }
+        });
+
+        // Function to update user
+        async function updateUser(userId, data) {
+            const response = await fetch(`${apiUrl}/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                await populateUserTable();
+                $(`#editUserModal-${userId}`).modal('hide');
+            } else {
+                console.error('Failed to update user', response.status, response.statusText);
+            }
+        }
+
+        // Function to delete user
+        async function deleteUser(userId) {
+            const response = await fetch(`${apiUrl}/users/${userId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                await populateUserTable();
+            }
+        }
+
+        // Populate roles in the "Add new user" form
+        async function populateRolesDropdown() {
+            const roles = await fetchRoles();
+            const rolesDropdown = document.getElementById('rolesChoose');
+            rolesDropdown.innerHTML = roles.map(role => `<option value="${role.id}">${role.name}</option>`).join('');
+        }
+
+        // Initial population of user table and roles dropdown
+        populateUserTable();
+        populateRolesDropdown();
+    });
+
+</script> <!-- Add your JavaScript file -->
+</body>
+</html>
